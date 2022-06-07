@@ -1,3 +1,11 @@
+---
+name: Pull Request
+about: Contribute to our project
+title: ''
+assignees: ''
+
+---
+
 **Is this pull request associated with an issue(s)?**
 Please list issues associated with this pull request, including [closing words](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
 as appropriate.
