@@ -1,0 +1,52 @@
+# Copyright 2022 CMakePP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+name: Build and Deploy Documentation
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: false
+        type: string
+        default: '3.7'
+      docs_dir:
+        required: false
+        type: string
+        default: 'docs'
+    secrets:
+      token:
+        required: true
+
+jobs:
+  Build-Documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ inputs.python_version }}
+      - name: Build Docs
+        run: |
+          python3 -m venv virt_env
+          source virt_env/bin/activate
+          pip3 install wheel
+          pip3 install .
+          cd docs
+          pip3 install -r requirements.txt
+          make html
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./${{ inputs.docs_dir }}/build/html
