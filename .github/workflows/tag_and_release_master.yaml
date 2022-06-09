@@ -37,4 +37,4 @@ jobs:
         run: |
           echo "Current version: ${{ steps.bumpr.outputs.current_version }}"
           echo "Next version: ${{ steps.bumpr.outputs.next_version }}"
-          echo "Message: ${{ steps.bumpr.outputs.message }"
+          echo "Message: ${{ steps.bumpr.outputs.message }}"
