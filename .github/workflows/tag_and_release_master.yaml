@@ -35,8 +35,3 @@ jobs:
           github_token: ${{ secrets.token }}
           tag_as_user: cmakepp[bot]
           tag_as_email: cmakepp[bot]@github.com
-      - name: Test outputs
-        run: |
-          echo "Current version: ${{ steps.bumpr.outputs.current_version }}"
-          echo "Next version: ${{ steps.bumpr.outputs.next_version }}"
-          echo "Message: ${{ steps.bumpr.outputs.message }}"
