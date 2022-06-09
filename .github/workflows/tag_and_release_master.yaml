@@ -28,11 +28,11 @@ jobs:
 
       - id: bumpr
         uses: haya14busa/action-bumpr@v1
-          with:
-            default_bump_level: patch
-            github_token:
-            tag_as_user: cmakepp[bot]
-            tag_as_email: cmakepp[bot]@github.com
+        with:
+          default_bump_level: patch
+          github_token:
+          tag_as_user: cmakepp[bot]
+          tag_as_email: cmakepp[bot]@github.com
       - name: Test outputs
         run: |
           echo "Current version: ${{ steps.bumpr.outputs.current_version }}"
