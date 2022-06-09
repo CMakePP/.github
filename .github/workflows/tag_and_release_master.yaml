@@ -17,7 +17,9 @@ name: Version Update and Release
 
 on:
   workflow_call:
-    inputs:
+    secrets:
+      token:
+        required: true
 
 jobs:
   release:
@@ -30,7 +32,7 @@ jobs:
         uses: haya14busa/action-bumpr@v1
         with:
           default_bump_level: patch
-          github_token:
+          github_token: ${{ secrets.token }}
           tag_as_user: cmakepp[bot]
           tag_as_email: cmakepp[bot]@github.com
       - name: Test outputs
