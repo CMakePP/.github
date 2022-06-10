@@ -1,4 +1,4 @@
-# Copyright 2022 CMakePP
+ # Copyright 2022 CMakePP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 #
 
-name: Version Update and Release
+name: Tag and Release
 
 on:
   workflow_call:
@@ -22,7 +22,7 @@ on:
         required: true
 
 jobs:
-  release:
+  update_version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -35,3 +35,15 @@ jobs:
           github_token: ${{ secrets.token }}
           tag_as_user: cmakepp[bot]
           tag_as_email: cmakepp[bot]@github.com
+
+      - name: Update VERSION.txt
+        run: echo "${{ steps.bumpr.outputs.next_version }}" > VERSION.txt
+
+      - name: Push VERSION.txt
+        uses: EndBug/add-and-commit@v4
+        with:
+          author_name: cmakepp[bot]
+          author_email: cmakepp[bot]@github.com
+          message: "update VERSION.txt"
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
