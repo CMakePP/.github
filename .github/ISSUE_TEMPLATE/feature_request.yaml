@@ -1,0 +1,31 @@
+name: Feature Request
+description: Suggest an ides for this project
+title: '[Feature]: '
+labels: ['enhancement']
+assignees:
+  - ''
+body:
+  - type: markdown
+    attributes:
+      values: |
+        Thank you for taking the time to tell us how to improve!
+      required: false
+  - type: textarea
+    attributes:
+      label: Is this related to a problem?
+      placeholder: "Ex. I'm always frusturated when [...]"
+      required: false
+  - type: textarea
+    attributes:
+      label: "What solution whould you like to see us adopt/implement?"
+      placeholder: "Ideally I should be able to [...]"
+      required: true
+  - type: textarea
+    attributes:
+      label: "What alternatives have you considered?"
+      placeholder: "I tried [...]"
+      required: false
+  - type: textarea
+    attributes:
+      label: "Any additional things we should know?"
+      requred: false
