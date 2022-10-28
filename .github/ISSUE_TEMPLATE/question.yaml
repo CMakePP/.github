@@ -1,0 +1,29 @@
+name: Question
+description: Ask a question
+title: '[Question]: '
+labels: [question]
+assignees:
+ - ''
+body:
+  - type: markdown
+    attributes:
+      values: |
+        Thank you for your interest in our software. We are happy to answer any
+        questions you may have and will get back to you shortly.
+  - type: checkboxes
+    attributes:
+      label: "Before opening this issue I:"
+      description: "Please verify you have done the following."
+      options:
+        - label: Checked the documentation for answers
+        - label: Looked for similar issues
+        - label: Did a quick internet search
+  - type: textarea
+    attributes:
+      label: Your question.
+      placeholder: "Can someone help me understand [...]?"
+      required: true
+  - type: textarea
+    attributes:
+      label: "Any additional context?"
+      required: false
