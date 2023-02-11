@@ -52,15 +52,15 @@ jobs:
           current_major="$(echo ${current_version} | cut -d'.' -f1)"
           next_major="$(echo ${next_version} | cut -d'.' -f1)"
           if [[ "${current_major}" == "${next_major}" ]]; then
-            echo "::set-output name=bumped_major::false"
+            echo "bumped_major=false" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=bumped_major::true"
+            echo "bumped_major=true" >>$GITHUB_OUTPUT
           fi
           current_minor="$(echo ${current_version} | cut -d'.' -f2)"
           next_minor="$(echo ${next_version} | cut -d'.' -f2)"
           if [[ "${current_minor}" == "${next_minor}" ]]; then
-            echo "::set-output name=bumped_minor::false"
+            echo "bumped_minor=false" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=bumped_minor::true"
+            echo "bumped_minor=true" >> $GITHUB_OUTPUT
           fi
 
