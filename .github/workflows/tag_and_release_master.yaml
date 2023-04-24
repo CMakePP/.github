@@ -42,7 +42,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+        with:
+          fetch-depth: 0
       - id: bumpr
         uses: haya14busa/action-bumpr@v1
         with:
