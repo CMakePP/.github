@@ -20,25 +20,10 @@ on:
     secrets:
       token:
         required: true
-    outputs:
-      bumped_major:
-        description: "Did we bump the major?"
-        value: ${{ jobs.update_version.outputs.bumped_major }}
-      bumped_minor:
-        description: "Did we bump the minor?"
-        value: ${{ jobs.update_version.outputs.bumped_minor }}
-      bumped_patch:
-        description: "Did we bump the patch?"
-        value: ${{ jobs.update_version.outputs.bumped_patch }}
-
 
 jobs:
   update_version:
     runs-on: ubuntu-latest
-    outputs:
-      bumped_major: ${{ steps.compute_output.outputs.bumped_major }}
-      bumped_minor: ${{ steps.compute_output.outputs.bumped_minor }}
-      bumped_patch: ${{ steps.compute_output.outputs.bumped_patch }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -51,36 +36,3 @@ jobs:
           github_token: ${{ secrets.token }}
           tag_as_user: cmakepp[bot]
           tag_as_email: cmakepp[bot]@github.com
-      - id: compute_output
-        run: |
-          current_version=${{ steps.bumpr.outputs.current_version }}
-          next_version=${{ steps.bumpr.outputs.next_version }}
-          current_major="$(echo ${current_version} | cut -d'.' -f1)"
-          next_major="$(echo ${next_version} | cut -d'.' -f1)"
-          if [[ "${current_major}" -ge "${next_major}" ]]; then
-            echo "bumped_major=false" >> $GITHUB_OUTPUT
-            echo "DEBUG: Not bumping major"
-          else
-            echo "bumped_major=true" >> $GITHUB_OUTPUT
-            echo "DEBUG: Bumping major"
-          fi
-          current_minor="$(echo ${current_version} | cut -d'.' -f2)"
-          next_minor="$(echo ${next_version} | cut -d'.' -f2)"
-          if [[ "${current_minor}" -ge "${next_minor}" ]]; then
-            echo "bumped_minor=false" >> $GITHUB_OUTPUT
-            echo "DEBUG: Not bumping minor"
-          else
-            echo "bumped_minor=true" >> $GITHUB_OUTPUT
-            echo "DEBUG: Bumping minor"
-          fi
-
-          current_patch="$(echo ${current_version} | cut -d'.' -f3)"
-          next_patch="$(echo ${next_version} | cut -d'.' -f3)"
-          if [[ "${current_patch}" -ge "${next_patch}" ]]; then
-            echo "bumped_patch=false" >> $GITHUB_OUTPUT
-            echo "DEBUG: Not bumping patch"
-          else
-            echo "bumped_patch=true" >> $GITHUB_OUTPUT
-            echo "DEBUG: Bumping patch"
-          fi
-
