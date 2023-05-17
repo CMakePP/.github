@@ -17,14 +17,22 @@ name: Build and Deploy Documentation
 on:
   workflow_call:
     inputs:
-      python_version:
+      api_docs_dir:
         required: false
         type: string
-        default: '3.7'
+        default: 'docs/source/api/generated_docs'
+      api_docs_module:
+        required: false
+        type: string
+        default: ''
       docs_dir:
         required: false
         type: string
         default: 'docs'
+      python_version:
+        required: false
+        type: string
+        default: '3.7'
     secrets:
       token:
         required: true
@@ -32,6 +40,12 @@ on:
 jobs:
   Build-Documentation:
     runs-on: ubuntu-latest
+
+    env:
+      api_docs_dir: ${{ inputs.api_docs_dir }}
+      api_docs_module: ${{ inputs.api_docs_module }}
+      docs_dir: ${{ inputs.docs_dir }}
+      venv: "virt_env"
     
     steps:
       - uses: actions/checkout@v2
@@ -40,19 +54,50 @@ jobs:
         with:
           python-version: ${{ inputs.python_version }}
           
-      - name: Build Docs
-        env:
-          docs_dir: ${{ inputs.docs_dir }}
+      - name: Create Virtual Environment
         run: |
-          # Create and activate a virtual environment to install Python packages
-          python3 -m venv virt_env
-          source virt_env/bin/activate
-          
-          # Install documentation required packages
+          python3 -m venv ${venv}
+          source ${venv}/bin/activate
+          pip3 install --upgrade pip
+
+      - name: Install Dependencies
+        run: |
+          source ${venv}/bin/activate
+          pip3 install -r ${docs_dir}/requirements.txt
+
+      - name: Generate API Documentation
+        run: |
+          if [[ "${api_docs_module}" == "" ]]; then
+              echo "Skipping CMinx API documentation generation."
+              exit
+          fi
+
+          source ${venv}/bin/activate
+
+          # Install CMinx
+          pip install CMinx
+
+          # Start with a clean slate
+          rm -rf ${docs_dir}/build
+          rm -rf build/api_docs
+          rm -rf ${api_docs_dir}
+
+          # Create a build directory for the api docs to be generated in
+          mkdir -p build
+
+          # Build the API docs with CMinx
+          cminx \
+              "cmake/${api_docs_module}" \
+              -o "build/api_docs/${api_docs_module}" \
+              -r -p ${api_docs_module}
+
+          # Move the api docs to the documentation directory
+          mv build/api_docs ${api_docs_dir}
+
+      - name: Build Documentation
+        run: |
+          source ${venv}/bin/activate
           cd ${docs_dir}
-          pip3 install -r requirements.txt
-          
-          # Build the documentation
           make html
           
       - name: Deploy to GitHub Pages
