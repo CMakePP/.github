@@ -32,19 +32,29 @@ on:
 jobs:
   Build-Documentation:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
+      
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ inputs.python_version }}
+          
       - name: Build Docs
+        env:
+          docs_dir: ${{ inputs.docs_dir }}
         run: |
+          # Create and activate a virtual environment to install Python packages
           python3 -m venv virt_env
           source virt_env/bin/activate
-          cd docs
+          
+          # Install documentation required packages
+          cd ${docs_dir}
           pip3 install -r requirements.txt
+          
+          # Build the documentation
           make html
-          deactivate
+          
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
