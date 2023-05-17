@@ -44,6 +44,7 @@ jobs:
     env:
       api_docs_dir: ${{ inputs.api_docs_dir }}
       api_docs_module: ${{ inputs.api_docs_module }}
+      build_api_docs_dir: "build/api_docs"
       docs_dir: ${{ inputs.docs_dir }}
       venv: "virt_env"
     
@@ -79,7 +80,7 @@ jobs:
 
           # Start with a clean slate
           rm -rf ${docs_dir}/build
-          rm -rf build/api_docs
+          rm -rf ${build_api_docs_dir}
           rm -rf ${api_docs_dir}
 
           # Create a build directory for the api docs to be generated in
@@ -88,11 +89,11 @@ jobs:
           # Build the API docs with CMinx
           cminx \
               "cmake/${api_docs_module}" \
-              -o "build/api_docs/${api_docs_module}" \
+              -o "${build_api_docs_dir}/${api_docs_module}" \
               -r -p ${api_docs_module}
 
           # Move the api docs to the documentation directory
-          mv build/api_docs ${api_docs_dir}
+          mv ${build_api_docs_dir}/ ${api_docs_dir}
 
       - name: Build Documentation
         run: |
