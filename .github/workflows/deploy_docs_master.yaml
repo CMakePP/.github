@@ -93,13 +93,8 @@ jobs:
 
           # Build the API docs with CMinx
           cminx \
-<<<<<<< Updated upstream
-              "cmake/${api_docs_module}" \
-              -o "${build_api_docs_dir}/${api_docs_module}" \
-=======
               "${cmake_source_dir}/${api_docs_module}" \
-              -o "build/api_docs/${api_docs_module}" \
->>>>>>> Stashed changes
+              -o "${build_api_docs_dir}/${api_docs_module}" \
               -r -p ${api_docs_module}
 
           # Move the api docs to the documentation directory
