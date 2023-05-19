@@ -25,6 +25,10 @@ on:
         required: false
         type: string
         default: ''
+      cmake_source_dir:
+        required: false
+        type: string
+        default: 'cmake'
       docs_dir:
         required: false
         type: string
@@ -45,6 +49,7 @@ jobs:
       api_docs_dir: ${{ inputs.api_docs_dir }}
       api_docs_module: ${{ inputs.api_docs_module }}
       build_api_docs_dir: "build/api_docs"
+      cmake_source_dir: ${{ inputs.cmake_source_dir }}
       docs_dir: ${{ inputs.docs_dir }}
       venv: "virt_env"
     
@@ -88,8 +93,13 @@ jobs:
 
           # Build the API docs with CMinx
           cminx \
+<<<<<<< Updated upstream
               "cmake/${api_docs_module}" \
               -o "${build_api_docs_dir}/${api_docs_module}" \
+=======
+              "${cmake_source_dir}/${api_docs_module}" \
+              -o "build/api_docs/${api_docs_module}" \
+>>>>>>> Stashed changes
               -r -p ${api_docs_module}
 
           # Move the api docs to the documentation directory
