@@ -7,12 +7,11 @@ This documentation is focused on things like CMakePP background, best coding
 practices, conventions, etc.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    about/index
    contributing
-   conventions/index
-   cmake/index
+   developer/index
    Contributors <authors>
    Code of Conduct <code_of_conduct>
    support
