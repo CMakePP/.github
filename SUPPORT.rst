@@ -1,4 +1,5 @@
-# Getting Support
+Getting Support
+###############
 
 CMakePP strives to be well-documented and user-friendly, that doesn't mean we 
 always accomplish this. If you need help please feel free to open an issue in
