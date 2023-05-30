@@ -1,2 +1,12 @@
+# Build directories
+docs/build
+cmake-build-debug
+
+# Virtual environments
+venv/
+
+# CLion settings
+.idea
+
 # VSCode Settings
 .vscode
