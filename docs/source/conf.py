@@ -2,8 +2,8 @@
 # -- Project information -----------------------------------------------------
 
 project = u'CMakeDev'
-copyright = u'2019, Ryan M. Richard'
-author = u'Ryan M. Richard'
+copyright = u'2019-2020, 2022-2023, Authors of CMakePP'
+author = u'Authors of CMakePP'
 
 # The short X.Y version
 version = u'1.0.0'
