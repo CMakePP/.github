@@ -1,12 +1,18 @@
 Contributors
 ############
 
+.. This file is sorted by the first letter of the name.
+
+* Brandon Butler (@AutonomicPerfectionist)
+   * Assorted patches
+
 * Ryan Richard (@ryanmrichard)
-  * Project lead
-  * Initial design and implementation
-  * Documentation
-  * Assorted patches
+   * **Project lead**
+   * Assorted patches
+   * CI templates
+   * Documentation
 
 * Zachery Crandall (@zachcran)
-  * Assorted patches
-  * Documentation
+   * Assorted patches
+   * CI actions
+   * Documentation
