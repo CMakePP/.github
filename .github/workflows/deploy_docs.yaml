@@ -17,7 +17,7 @@ name: Build and Deploy Documentation
 on:
   pull_request:
     types:
-      - closed
+      - main
       
   # Allows manual triggering with the "Run workflow" button
   workflow_dispatch:
