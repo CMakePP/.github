@@ -10,5 +10,10 @@ practices, conventions, etc.
    :maxdepth: 2
 
    about/index
+   contributing
    conventions/index
    cmake/index
+   Contributors <authors>
+   Code of Conduct <code_of_conduct>
+   support
+   license

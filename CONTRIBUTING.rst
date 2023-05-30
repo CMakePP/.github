@@ -47,7 +47,7 @@ throughout the process. We welcome contributions to any part of our projects,
 not just source code.
 
 Please make sure your PR follows our
-`coding conventions <https://cmakepp.github.io/CMakeDev/conventions/index.html>`__.
+`coding conventions <https://cmakepp.github.io/.github/conventions/index.html>`__.
 
 Contributor License Agreement (CLA)
 ***********************************
@@ -75,7 +75,7 @@ Code of Conduct
 ***************
 
 All interactions with the CMakePP organization are governed by our
-`Code of Conduct <https://github.com/CMakePP/.github/blob/main/CODE_OF_CONDUCT.md>`__.
+`Code of Conduct <https://cmakepp.github.io/.github/code_of_conduct/index.html>`__.
 
 
 Acknowledgments

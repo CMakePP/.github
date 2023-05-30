@@ -2,8 +2,8 @@
 Other Relevant Projects
 ***********************
 
-In order to put CPP in perspective this chapter describes some other relevant
-projects. The projects are listed in alphabetic order.
+In order to put CMakePP in perspective, this chapter describes some other
+relevant projects. The projects are listed in alphabetic order.
 
 Autocmake
 =========
