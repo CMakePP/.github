@@ -6,3 +6,7 @@ to simplify building and packaging of projects with CMake.
 ## Resources
 
 - [website](https://cmakepp.github.io/)
+
+## Acknowledgments
+
+TODO: Thank ISU and DOE
