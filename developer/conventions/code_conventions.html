@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Conventions &mdash; CMakeDev 1.0.0alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Documenting CMakePP" href="documentation.html" />
+    <link rel="prev" title="Conventions" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMakeDev
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about/index.html">About CMake Packaging Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to CMakePP</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Conventions</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Code Conventions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-setup">Module Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="documentation.html">Documenting CMakePP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cmake/index.html">CMake Language</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../support.html">Getting Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMakeDev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conventions</a></li>
+      <li class="breadcrumb-item active">Code Conventions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/conventions/code_conventions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="code-conventions">
+<h1>Code Conventions<a class="headerlink" href="#code-conventions" title="Permalink to this heading"></a></h1>
+<p>This page details the coding conventions used within the CMake project. We
+specifically focus on the conventions to use when writing CMake/CMakePP code as
+Python code should adhere to PEP-8.</p>
+<section id="module-setup">
+<h2>Module Setup<a class="headerlink" href="#module-setup" title="Permalink to this heading"></a></h2>
+<p>CMake/CMakePP code is written in modules. A typical CMake module file should
+look like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c">#</span>
+<span class="w"> </span><span class="c"># 1. The license boilerplate header</span>
+<span class="w"> </span><span class="c">#</span>
+
+<span class="w"> </span><span class="nb">include_guard</span><span class="p">()</span><span class="w">  </span><span class="c"># 2</span>
+
+<span class="w"> </span><span class="nb">include</span><span class="p">(</span><span class="s">a_submodule</span><span class="p">)</span><span class="w">  </span><span class="c"># 3</span>
+<span class="w"> </span><span class="nb">include</span><span class="p">(</span><span class="s">b_submodule</span><span class="p">)</span>
+
+<span class="c">#[[[</span>
+<span class="c">#</span>
+<span class="c"># 4. Documentation comment for class/function/variable</span>
+<span class="c">#</span>
+<span class="c">#]]</span>
+<span class="nb">function</span><span class="p">(</span><span class="s">my_fxn</span><span class="p">)</span>
+<span class="w">    </span><span class="c"># Defined the function</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For the most part this follows the typical conventions in Python and C/C++. The
+main pieces are:</p>
+<ol class="arabic simple">
+<li><p>All module files must start with the boilerplate license of the Apache 2.0
+license. To maintain uniformity please/copy paste this verbatim from another
+file.</p></li>
+<li><p>The first actual command in a CMake module should always be
+<code class="docutils literal notranslate"><span class="pre">include_guard()</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">include_guard()</span></code> was introduced in CMake 3.10 and serves the same
+purpose as <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">once</span></code> in C/C++, namely to avoid including the same
+module more than once, even if multiple modules attempt to include it.</p></li>
+</ul>
+</li>
+<li><p>You should include all CMake modules required to use your module.</p>
+<ul class="simple">
+<li><p>Modules should be listed in alphabetic order</p></li>
+<li><p>It should be possible to use your module simply by including it, <em>i.e.</em>,
+users should not have to include additional modules in order for your
+module to work</p></li>
+<li><p>If your module depends on a module A, which in turn depends on B, you
+should directly include B in your module only if your module uses B too.</p>
+<ul>
+<li><p>Using B to interface with A does not count as your module using B.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>After the top matter, you should include your code. All code should have API
+documentation immediately proceeding it. The API documentation should follow
+CMakePP’s documentation standards.</p>
+<ul class="simple">
+<li><p>You can have multiple functions, classes, etc. in the same CMake module if
+you want.</p></li>
+<li><p>Generally speaking CMake/CMakePP are very verbose languages, which can
+require a great deal of comments to understand quickly. For this reason
+it is often beneficial for readability to only include a single function or
+class in a module.</p></li>
+</ul>
+</li>
+</ol>
+<p>Additional considerations:</p>
+<ul class="simple">
+<li><p>Please limit your code to 80 characters per line.</p>
+<ul>
+<li><p>There are plenty of StackOverflow and blog posts on why this is a good idea.
+To summarize them:</p>
+<ul>
+<li><p>Ease of reading. The human eye gets tired quicker if it has to scroll
+horizontally too much.</p></li>
+<li><p>Many people often have more than one source file open at a time. Using an
+IDE with a reasonable font size, two sources file side-by-side basically
+takes up an entire monitor if they are around 80 characters per line.</p></li>
+<li><p>Easier to embed code in documents, emails, etc. without additional
+formatting.</p></li>
+</ul>
+</li>
+<li><p>The choice of 80 versus say 85 is somewhat arbitrary and is primarily made
+to adhere to usual conventions.</p>
+<ul>
+<li><p>Another motivation for 80 is that in high-performance computing it is
+often convenient to edit a file from a terminal. For better or for worse,
+for legacy reasons terminals tend to be based on 80 characters.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="documentation.html" class="btn btn-neutral float-right" title="Documenting CMakePP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2020, 2022-2023, Authors of CMakePP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

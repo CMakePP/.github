@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Flow Statements &mdash; CMakeDev 1.0.0alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Writing Your Own CMake Functions" href="writing_functions.html" />
+    <link rel="prev" title="CMake Language" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMakeDev
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about/index.html">About CMake Packaging Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to CMakePP</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../conventions/index.html">Conventions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">CMake Language</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Control Flow Statements</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#if-statements">“if” Statements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#foreach-statements">Foreach Statements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="writing_functions.html">Writing Your Own CMake Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="callbacks.html">Callbacks and Lambdas in CMake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="best_practices.html">Best CMake Practices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../support.html">Getting Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMakeDev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">CMake Language</a></li>
+      <li class="breadcrumb-item active">Control Flow Statements</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/cmake/control_flow.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="control-flow-statements">
+<h1>Control Flow Statements<a class="headerlink" href="#control-flow-statements" title="Permalink to this heading"></a></h1>
+<p>Control flow statements are a key piece of almost all programming languages.
+CMake includes support for <code class="docutils literal notranslate"><span class="pre">if/elseif/else</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, and <code class="docutils literal notranslate"><span class="pre">foreach</span></code>. For
+the most part <code class="docutils literal notranslate"><span class="pre">while</span></code> behaves how you expect, once you understand <code class="docutils literal notranslate"><span class="pre">if</span></code>, and
+will not be covered in this chapter.</p>
+<section id="if-statements">
+<h2>“if” Statements<a class="headerlink" href="#if-statements" title="Permalink to this heading"></a></h2>
+<p>“if” statements in CMake are very tricky owing to their peculiar semantics and
+rules. This section is dedicated to pointing out the quirks of “if” statements
+and how to avoid them. This section is only focused on “if” statements
+encountered during normal CMake execution.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At least with CMake 3.15.3 the semantics for passing recognized booleans
+differ between normal CMake execution and CMake scripting mode (running CMake
+with the <code class="docutils literal notranslate"><span class="pre">-P</span></code> flag). More specifically in scripting mode booleans provided
+to functions are not recognized by “if” statements within those functions.
+The boolean values are instead treated like normal strings (as evidenced by
+the raised warning). For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">a_fxn</span><span class="w"> </span><span class="s">x</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">x</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;All good&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">else</span><span class="p">()</span>
+<span class="w">        </span><span class="nb">message</span><span class="p">(</span><span class="s">FATAL_ERROR</span><span class="w"> </span><span class="s2">&quot;what????&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+<span class="nb">a_fxn</span><span class="p">(</span><span class="s">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will pass during normal CMake execution, but fail if CMake is run in
+scripting mode. It is not clear if this is a bug or a subtle difference
+between the two modes.</p>
+</div>
+<section id="evaluating-conditions">
+<h3>Evaluating Conditions<a class="headerlink" href="#evaluating-conditions" title="Permalink to this heading"></a></h3>
+<p>“if” statements were written early in CMake’s lifetime, before <code class="docutils literal notranslate"><span class="pre">${}</span></code> was
+introduced and therefore have somewhat obscure semantics.  This subsection goes
+through those semantics.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">${}</span></code> was not invented yet, it was decided that the “if” statement
+automatically dereferences its argument, unless that argument is a recognized
+boolean. In other words:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">x</span><span class="w"> </span><span class="s">FALSE</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">y</span><span class="w"> </span><span class="s">x</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">y</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The if clause&quot;</span><span class="p">)</span>
+<span class="nb">else</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The else clause&quot;</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">y</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The if clause&quot;</span><span class="p">)</span>
+<span class="nb">else</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The else clause&quot;</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will print “The if clause” and then the “The else clause”. This is because the
+first “if” statement checks that <code class="docutils literal notranslate"><span class="pre">y</span></code> has a non-false value, which it does
+(its value is <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>). The second statement checks that <code class="docutils literal notranslate"><span class="pre">x</span></code> has a non-false
+value, which it does not (its value is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>). In other words, the second
+statement is <strong>NOT</strong> checking whether or not <code class="docutils literal notranslate"><span class="pre">x</span></code> is defined, but rather if
+<code class="docutils literal notranslate"><span class="pre">${x}</span></code> is true. The only time the variable does not get dereferenced is if it
+is a recognized CMake boolean literal (you should never name your variables this
+way…):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">TRUE</span><span class="w"> </span><span class="s">FALSE</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">TRUE</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The if clause&quot;</span><span class="p">)</span>
+<span class="nb">else</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;The else clause&quot;</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will trip the if-clause because CMake will not dereference the variable
+<code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.</p>
+</section>
+<section id="wrapping-if-statements">
+<h3>Wrapping “if” Statements<a class="headerlink" href="#wrapping-if-statements" title="Permalink to this heading"></a></h3>
+<p>Several of the lower-level CMakePP functions look like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmakepp_fxn</span><span class="p">(</span><span class="s">&lt;condition&gt;</span><span class="w"> </span><span class="s">&lt;thing2do&gt;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the idea is that based on the truthy-ness of the condition the function
+does something. Under the hood the implementation of such functions inevitably
+wraps a call to “if”. This section focuses on the gotchas of implementing such
+functions. For our purposes let’s assume we are trying to write a function,
+which prints the message if a condition is true. This looks like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">print_if_true</span><span class="w"> </span><span class="s">condition</span><span class="w"> </span><span class="s">msg</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="o">${</span><span class="nv">condition</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">message</span><span class="p">(</span><span class="o">${</span><span class="nv">msg</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>So now we try it out with a few conditions:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">print_if_true</span><span class="p">(</span><span class="s">TRUE</span><span class="w"> </span><span class="s2">&quot;just a boolean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As part of a normal CMake run this works fine; however, it fails if CMake is run
+in scripting mode (I was using CMake 3.15.3 and am not sure if this is a bug or
+some oddity of scripting mode; in scripting mode this somehow becomes “TRUE”,
+which trips a warning that if statement looks like <code class="docutils literal notranslate"><span class="pre">if(&quot;TRUE&quot;)</span></code>).</p>
+<p>Let’s try a more complicated expression:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">print_if_true</span><span class="p">(</span><span class="s2">&quot;x STREQUAL x&quot;</span><span class="w"> </span><span class="s2">&quot;with a string comparison&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the rules of how if statements evaluate, we see this call evaluates to:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>if(&quot;x STREQUAL x&quot;)
+    ...
+endif()
+</pre></div>
+</div>
+<p>which checks if <code class="docutils literal notranslate"><span class="pre">${x</span> <span class="pre">STREQUAL</span> <span class="pre">x}</span></code> evaluates to a non-false constant and it
+fails (assuming you didn’t set <code class="docutils literal notranslate"><span class="pre">&quot;x</span> <span class="pre">STREQUAL</span> <span class="pre">x&quot;</span></code> to a non-false constant). We
+can fix that if we make the condition a list:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">print_if_true</span><span class="p">(</span><span class="s2">&quot;x;STREQUAL;x&quot;</span><span class="w"> </span><span class="s2">&quot;with a string comparison&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will work with an arbitrarily complicated condition, so long as there are
+no empty strings in it. The easiest way to deal with empty string (or variables
+that may possibly be empty) is to add padding spaces:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">print_if_true</span><span class="p">(</span><span class="s2">&quot;${I_may_be_empty} ;STREQUAL; &quot;</span><span class="w"> </span><span class="s2">&quot;variable is empty&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lists are also somewhat problematic, but the problem can be avoided by using
+bracket arguments, for example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">print_if_true</span><span class="p">(</span><span class="s2">&quot;[[1;2;3]];STREQUAL;[[1;2;3]]&quot;</span><span class="w"> </span><span class="s2">&quot;lists are equal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="foreach-statements">
+<h2>Foreach Statements<a class="headerlink" href="#foreach-statements" title="Permalink to this heading"></a></h2>
+<p>For looping in CMake one typically uses the <code class="docutils literal notranslate"><span class="pre">foreach</span></code> statement. This
+statement works great if you need to loop over the elements in a CMake list. In
+such cases looping is as simple as:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">foreach</span><span class="p">(</span><span class="s">elem</span><span class="w"> </span><span class="o">${</span><span class="nv">my_list</span><span class="o">}</span><span class="p">)</span>
+<span class="w">   </span><span class="c"># Do stuff with element</span>
+<span class="nb">endforeach</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>However, other looping modes are not so straightforward.</p>
+<section id="iterating-over-ranges">
+<h3>Iterating Over Ranges<a class="headerlink" href="#iterating-over-ranges" title="Permalink to this heading"></a></h3>
+<p>To iterate over a range one needs the starting value, the ending value, and the
+increment (we ignore the increment for this section). When indexing starts at 0
+it is common to specify ranges as half-open like <span class="math notranslate nohighlight">\([0, n)\)</span>, where <span class="math notranslate nohighlight">\(n\)</span>
+is the number of elements in the range, but <span class="math notranslate nohighlight">\(n\)</span> is not in the range
+itself. Indexing in CMake also starts at 0; however, CMake’s <code class="docutils literal notranslate"><span class="pre">foreach</span></code>
+statements require you to specify closed ranges. As a closed range,
+<span class="math notranslate nohighlight">\([0, n)\)</span> is <span class="math notranslate nohighlight">\([0, n-1]\)</span>, thus we need to provide <code class="docutils literal notranslate"><span class="pre">foreach</span></code> with
+<span class="math notranslate nohighlight">\(n-1\)</span>. In most languages this would amount to two extra key strokes (or
+four with some padding spaces); however, in CMake we can not do the arithmetic
+in-place (<em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">foreach(i</span> <span class="pre">RANGE</span> <span class="pre">n-1)</span></code> is not valid). The result is that in
+CMake one typically iterates over a range using boilerplate like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">math</span><span class="p">(</span><span class="s">EXPR</span><span class="w"> </span><span class="s">last_index</span><span class="w"> </span><span class="s2">&quot;&lt;number_of_elements_in_range&gt; - 1&quot;</span><span class="p">)</span>
+<span class="nb">foreach</span><span class="p">(</span><span class="s">index</span><span class="w"> </span><span class="s">RANGE</span><span class="w"> </span><span class="s2">&quot;${last_index}&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">list</span><span class="p">(</span><span class="s">GET</span><span class="w"> </span><span class="s">element</span><span class="w"> </span><span class="s">&lt;list&gt;</span><span class="w"> </span><span class="s2">&quot;${index}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># (or whatever gets index-th value)</span>
+<span class="w">    </span><span class="c"># Do stuff</span>
+<span class="nb">endforeach</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="CMake Language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="writing_functions.html" class="btn btn-neutral float-right" title="Writing Your Own CMake Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2020, 2022-2023, Authors of CMakePP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

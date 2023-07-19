@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working With CMake Lists &mdash; CMakeDev 1.0.0alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMakeDev
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about/index.html">About CMake Packaging Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to CMakePP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../support.html">Getting Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMakeDev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Working With CMake Lists</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/cmake/lists.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="working-with-cmake-lists">
+<h1>Working With CMake Lists<a class="headerlink" href="#working-with-cmake-lists" title="Permalink to this heading"></a></h1>
+<p>CMake lists are a pain point and should be avoided. That said, there are times
+you need to work with them (for example when using native CMake functions, or in
+low-level CMakePP routines). This page hopes to make working with CMake lists as
+painless as possible.</p>
+<section id="list-gotchas">
+<h2>List Gotchas<a class="headerlink" href="#list-gotchas" title="Permalink to this heading"></a></h2>
+<p>The biggest gotcha associated with CMake lists is the fact that they are just
+strings separated by semicolons. What this means is they don’t retain any sort
+of nesting. For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">a_list</span><span class="w"> </span><span class="s">1</span><span class="w"> </span><span class="s">2</span><span class="w"> </span><span class="s">3</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">b_list</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;${b_list}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># prints &quot;1;2;3;1;2;3;1;2;3&quot;</span>
+</pre></div>
+</div>
+<p>If the intent is to set <code class="docutils literal notranslate"><span class="pre">b_list</span></code> to a list of lists this will fail. The print
+statement shows why, namely CMake “flattened” the list. Instead of getting a
+list whose elements are lists of three numbers, we get a list of nine numbers.
+It is possible to preserve the nesting by escaping the semicolons:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">a_list</span><span class="w"> </span><span class="s2">&quot;1\;2\;3&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">b_list</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="w"> </span><span class="s2">&quot;${a_list}&quot;</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;${b_list}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># prints &quot;1\;2\;3;1\;2\;3;1\;2\;3&quot;</span>
+</pre></div>
+</div>
+<p>Now the <code class="docutils literal notranslate"><span class="pre">\;</span></code> diglyph is a separator for elements in the nested lists and the
+unescaped semicolons are separators for elements in the outer list. This can be
+extended to arbitrary nestings, but is a particularly ugly means of doing so.</p>
+<p>At first the nesting gotcha may not seem so bad since we rarely need to pass
+two-dimensional lists in CMake; however, one needs to keep in mind that CMake
+concatenates arguments to a function into a list in order to pass them. This is
+perhaps easiest to see with an example. Consider the function:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">a_fxn</span><span class="w"> </span><span class="s">arg0</span><span class="w"> </span><span class="s">arg1</span><span class="w"> </span><span class="s">arg2</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Provided arguments: ${arg0}, ${arg1}, ${arg2}, and ${ARGN}&quot;</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which prints the three provided positional arguments and then the variadic
+arguments separated by the word “and”. If we invoke the function like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">a_fxn</span><span class="p">(</span><span class="s">1</span><span class="w"> </span><span class="s">2</span><span class="w"> </span><span class="s">3</span><span class="w"> </span><span class="s">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>we get the output <code class="docutils literal notranslate"><span class="pre">&quot;Provided</span> <span class="pre">arguments:</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">and</span> <span class="pre">4&quot;</span></code>, as expected. If we
+instead call it like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">a_list</span><span class="w"> </span><span class="s">1</span><span class="w"> </span><span class="s">2</span><span class="p">)</span>
+<span class="nb">a_fxn</span><span class="p">(</span><span class="s2">&quot;${a_list}&quot;</span><span class="w"> </span><span class="s">3</span><span class="w"> </span><span class="s">4</span><span class="w"> </span><span class="s">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>we get <code class="docutils literal notranslate"><span class="pre">&quot;Provided</span> <span class="pre">arguments:</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">and</span> <span class="pre">4;5&quot;</span></code>. The user likely expected to
+get <code class="docutils literal notranslate"><span class="pre">&quot;Provided</span> <span class="pre">arguments:</span> <span class="pre">1;2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">and</span> <span class="pre">5&quot;</span></code>. The reason for 4 and 5 being
+passed as the variadic arguments is that <code class="docutils literal notranslate"><span class="pre">a_fxn(&quot;${a_list}&quot;</span> <span class="pre">3</span> <span class="pre">4</span> <span class="pre">5)</span></code> actually
+looks like <code class="docutils literal notranslate"><span class="pre">a_fxn(1;2;3;4;5)</span></code> when <code class="docutils literal notranslate"><span class="pre">a_fxn</span></code> is invoked.</p>
+</section>
+<section id="passing-lists">
+<h2>Passing Lists<a class="headerlink" href="#passing-lists" title="Permalink to this heading"></a></h2>
+<p>The previous section illustrated how passing lists to a function can be tricky.
+Thankfully there is an easy to way to pass arbitrarily nested lists without
+resorting to escape characters, pass them by reference. To do this we save each
+nesting of the list into a variable and use the name of the variable (not the
+list itself) when composing the next list. For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">nesting00</span><span class="w"> </span><span class="s">1</span><span class="w"> </span><span class="s">2</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">nesting01</span><span class="w"> </span><span class="s">3</span><span class="w"> </span><span class="s">4</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">nesting0</span><span class="w"> </span><span class="s">nesting00</span><span class="w"> </span><span class="s">nesting01</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">nesting10</span><span class="w"> </span><span class="s">5</span><span class="w"> </span><span class="s">6</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">nesting11</span><span class="w"> </span><span class="s">7</span><span class="w"> </span><span class="s">8</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">nesting1</span><span class="w"> </span><span class="s">nesting10</span><span class="w"> </span><span class="s">nesting11</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">the_list</span><span class="w"> </span><span class="s">nesting0</span><span class="w"> </span><span class="s">nesting1</span><span class="p">)</span>
+
+<span class="nb">function</span><span class="p">(</span><span class="s">fxn_taking_list</span><span class="w"> </span><span class="s">a_list</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;List contents: ${${a_list}}&quot;</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+
+<span class="nb">fxn_taking_list</span><span class="p">(</span><span class="s">the_list</span><span class="p">)</span><span class="w">  </span><span class="c"># Prints &quot;nesting0;nesting1&quot;</span>
+</pre></div>
+</div>
+<p>The first seven lines make a nested-nested-list (it’s a row-major 2x2x2 tensor
+whose elements are the numbers 1 to 8 if that helps you wrap your mind around
+the structure). Note that on lines 3 and 6 we build the nested-list by using
+the names of the sublists and not the values, <em>i.e.</em>, we do <strong>NOT</strong> do:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">nesting0</span><span class="w"> </span><span class="s2">&quot;${nesting00}&quot;</span><span class="w"> </span><span class="s2">&quot;${nesting01}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We follow the same principle on line 7 where we put the nested-lists together to
+make the nested-nested-list. The next thing to note is the function takes the
+list by reference and not value, by this we mean we need a double dereference
+(the <code class="docutils literal notranslate"><span class="pre">${${a_list}}</span></code> part) to get the value instead of the normal
+<code class="docutils literal notranslate"><span class="pre">${a_list}</span></code>. This is because <code class="docutils literal notranslate"><span class="pre">${a_list}</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">the_list</span></code>, which
+then needs to be dereferenced again in order to get the list.</p>
+<p>The drawback of this approach is that the function needs to know ahead of time
+that it is getting a list by reference and it needs to know how deeply nested
+the list is in order to actually retrieve values, as opposed to a sublist. For
+functions designed to work with arbitrarily nested lists this can be remedied by
+having the caller pass in the nesting. Attempting to dereference until an
+empty string is found is not recommended as it becomes difficult to work with
+slices of the list this way.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2020, 2022-2023, Authors of CMakePP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

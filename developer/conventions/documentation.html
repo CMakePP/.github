@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documenting CMakePP &mdash; CMakeDev 1.0.0alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CMake Language" href="../cmake/index.html" />
+    <link rel="prev" title="Code Conventions" href="code_conventions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMakeDev
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about/index.html">About CMake Packaging Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to CMakePP</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Conventions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="code_conventions.html">Code Conventions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Documenting CMakePP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#api-documentation">API Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#narrative-documentation">Narrative Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cmake/index.html">CMake Language</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../support.html">Getting Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMakeDev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Conventions</a></li>
+      <li class="breadcrumb-item active">Documenting CMakePP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/conventions/documentation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documenting-cmakepp">
+<h1>Documenting CMakePP<a class="headerlink" href="#documenting-cmakepp" title="Permalink to this heading"></a></h1>
+<p>For the most part documentation in the CMakePP project falls into one of two
+categories: API or narrative. The following sections describe the conventions
+associated with these types. Many of the conventions rely on reStructuredText
+(reST) so the reader may find
+<a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">this</a>
+reST primer to be of use.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I presume there’s actually a real computer science term for “narrative
+documentation”; however, my Google-ing did not manage to find it so I’m using
+“narrative documentation” as a placeholder for it. If you know the real term
+please open an issue on the CMakeDev repo so that the documentation can be
+updated.</p>
+</div>
+<section id="api-documentation">
+<h2>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this heading"></a></h2>
+<p>API documentation tells you how to use a function, what a variable is for, or
+what a class models. Maintaining good API documentation is a key aspect of
+ensuring CMakePP is user-friendly. API documentation should not be used for
+prolonged discussions of the inner workings of a function or algorithm (such
+things should be documented, but fall under narrative documentation). For the
+most part source code associated with CMakePP is written in one of two
+languages, Python or CMake, and the following subsections describe the
+conventions for documenting APIs in each of those languages in detail.</p>
+<section id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this heading"></a></h3>
+<p>Python has community accepted standards for documentation. Those standards are
+available in the
+<a class="reference external" href="https://devguide.python.org/documenting/">Python’s developer guide</a>. The main
+points are:</p>
+<ul class="simple">
+<li><p>No more than 80 characters on a line</p></li>
+<li><p>Indents are 3 spaces, not 4, and not tabs</p></li>
+<li><p>Comments use restructured text (reST)</p></li>
+</ul>
+<p>The standard does not however strictly specify the contents of the documentation
+or the format of the comments. At the moment, Sphinx is the <em>de facto</em> tool for
+creating Python documentation from comments and we thus choose to follow
+<a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#python-signatures">Sphinx’s standards</a>.</p>
+<p>To summarize this style, positional arguments are documented like:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:param arg1:</span> description of arg2
+<span class="nc">:type arg1:</span> type of arg1
+</pre></div>
+</div>
+<p>variadic arguments like:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:param *args:</span> description of the variadic arguments
+<span class="nc">:type *args:</span> The type(s) of the variadic arguments
+</pre></div>
+</div>
+<p>and returns are documented like:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:return:</span> description of what is returned
+<span class="nc">:rtype:</span> The type of the returned object
+</pre></div>
+</div>
+<p>It should be noted that Python functions which return multiple values do so in a
+tuple, so the correct documentation for a multiple-return value function is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_mr_fxn</span><span class="p">():</span>
+<span class="w">   </span><span class="sd">&quot;&quot;&quot; Function which returns multiple values.</span>
+
+<span class="sd">   :return: Two of the most overused values in documentation.</span>
+<span class="sd">   :rtype: tuple(int, str)</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+
+   <span class="k">return</span> <span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;Hello World&#39;</span>
+</pre></div>
+</div>
+<p>I have not been able to find a standardized way of documenting kwargs; however,
+one “hack” I’ve come across that produces something that looks like the other
+aspects of the function’s API is:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:param **kwargs:</span> See below
+
+<span class="nc">:Keyword Arguments:</span>
+   <span class="m">*</span> <span class="ge">*kwarg1*</span> (<span class="s">``type``</span>) -- description
+   <span class="m">*</span> <span class="ge">*kwarg2*</span> (<span class="s">``type``</span>) -- description
+</pre></div>
+</div>
+<p>basically you have to manually make the kwargs section match the sections
+auto-generated by Sphinx.</p>
+</section>
+<section id="cmake">
+<h3>CMake<a class="headerlink" href="#cmake" title="Permalink to this heading"></a></h3>
+<p>CMake documentation uses the <code class="docutils literal notranslate"><span class="pre">CMakeDoc</span></code> tool developed by the CMakePP project.
+This tool looks for specially prefixed CMake comments (line comments that start
+with <code class="docutils literal notranslate"><span class="pre">##</span></code> and block comments that start with <code class="docutils literal notranslate"><span class="pre">#[[[</span></code>) and extracts the
+contents verbatim as documentation of the API/variable that the comment
+immediately proceeds. The contents of the comment are assumed to be reST and it
+is assumed that the documentation will be built using Sphinx. Therefore, we
+adopt the same reST standards as we do for Python with the following exceptions.</p>
+<p>Whereas global variables are frowned upon in Python they are unfortunately
+somewhat common in CMake. To document the global variables your function uses
+the syntax is:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:var GLOBAL_VARIABLE:</span> Description of global variable
+<span class="nc">:vartype GLOBAL_VARIABLE:</span> type of the value stored in the global variable
+</pre></div>
+</div>
+</section>
+</section>
+<section id="narrative-documentation">
+<h2>Narrative Documentation<a class="headerlink" href="#narrative-documentation" title="Permalink to this heading"></a></h2>
+<p>Narrative documentation is like the page you are currently reading. It is only
+loosely tied to a particular piece of code. Narrative documentation is meant for
+providing overviews, background information, implementation details, etc.
+Narrative documentation is built with Sphinx and is written using
+Sphinx-flavored reST. Consequentially many of the reST conventions from the API
+Documentation section carry over.</p>
+<p>Compared to writing reST API documentation the biggest difference when writing
+narrative documentation is that narrative documentation is typically partitioned
+into parts, chapters, sections, etc. While reST doesn’t particularly care what
+characters you use to distinguish between headings for parts, chapters,
+sections, etc. it is very common practice (stemming from Python’s documentation
+conventions) to obey:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">#</span></code> with overline for part headings</p>
+<ul>
+<li><p>We also use this for the package name on the main <code class="docutils literal notranslate"><span class="pre">index.rst</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> with overline for chapter headings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">=</span></code> for sections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-</span></code> for subsections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">^</span></code> for subsubsections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> for paragraphs</p></li>
+<li><p>and you should seriously reevaluate your documentation if you need anything
+beyond that…</p></li>
+</ul>
+<p>The distinction between what constitutes a part, chapter, etc. is a bit fuzzy,
+but the general idea is that as you nest titles you rotate through the various
+characters. Typically what this means is that you’ll use <code class="docutils literal notranslate"><span class="pre">#</span></code> for titles on
+<code class="docutils literal notranslate"><span class="pre">index.rst</span></code> pages, <code class="docutils literal notranslate"><span class="pre">*</span></code> for titles of pages included from <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>
+pages, and <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, and <code class="docutils literal notranslate"><span class="pre">^</span></code> respectively for sections, subsections, and
+subsubsections in the page included from the <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> file.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="code_conventions.html" class="btn btn-neutral float-left" title="Code Conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../cmake/index.html" class="btn btn-neutral float-right" title="CMake Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2020, 2022-2023, Authors of CMakePP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

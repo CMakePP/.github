@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing Your Own CMake Functions &mdash; CMakeDev 1.0.0alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Callbacks and Lambdas in CMake" href="callbacks.html" />
+    <link rel="prev" title="Control Flow Statements" href="control_flow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMakeDev
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about/index.html">About CMake Packaging Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to CMakePP</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../conventions/index.html">Conventions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">CMake Language</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="control_flow.html">Control Flow Statements</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Writing Your Own CMake Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#function-vs-macro">Function vs. Macro</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returning-values">Returning Values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#namespace-collisions">Namespace Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variable-collisions">Variable Collisions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="callbacks.html">Callbacks and Lambdas in CMake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="best_practices.html">Best CMake Practices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../support.html">Getting Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMakeDev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">CMake Language</a></li>
+      <li class="breadcrumb-item active">Writing Your Own CMake Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/cmake/writing_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="writing-your-own-cmake-functions">
+<h1>Writing Your Own CMake Functions<a class="headerlink" href="#writing-your-own-cmake-functions" title="Permalink to this heading"></a></h1>
+<p>The main reason CMakePP can exist is that CMake allows users to write their own
+functions. While the process of declaring a function is straightforward there
+are some gotchas to keep in mind. This chapter focuses on avoiding those
+gotchas.</p>
+<section id="function-vs-macro">
+<h2>Function vs. Macro<a class="headerlink" href="#function-vs-macro" title="Permalink to this heading"></a></h2>
+<p>CMake provides two types of user-defined functions “macros” and
+“functions”. The only difference is that “functions” create a new scope, whereas
+“macros” do not. This is probably easiest to explain with an example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">a_fxn</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">my_x</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+
+<span class="nb">macro</span><span class="p">(</span><span class="s">a_macro</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">my_x</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="nb">endmacro</span><span class="p">()</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">my_x</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">a_fxn</span><span class="p">()</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;my_x = &#39;${my_x}&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Will print &quot;my_x = &#39;&#39;&quot;</span>
+<span class="nb">a_macro</span><span class="p">()</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;my_x = &#39;${my_x}&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="c"># Will print &quot;my_x = &#39;Hello World&#39;&quot;</span>
+</pre></div>
+</div>
+<p>When designing functionality for CMakePP you should primarily use functions to
+avoid contaminating the caller’s namespace. That said, there are some
+circumstances where CMakePP developers will still want to use macros. Arguably,
+the most common circumstance is to break up long functions into smaller units.
+In this use case, which the macros are intended for use solely in the longer
+function and thus the lack of an additional scope does not affect the caller of
+the function because the macro’s manipulations are contained within the
+function’s scope. Generally speaking, if you use a macro instead of a function
+it is a good idea to explain why in the documentation.</p>
+</section>
+<section id="returning-values">
+<h2>Returning Values<a class="headerlink" href="#returning-values" title="Permalink to this heading"></a></h2>
+<p>Unfortunately, CMake does not allow functions or macros to return values in the
+traditional sense, that is to say the following is not valid CMake:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>result = a_fxn(an_argument)
+</pre></div>
+</div>
+<p>The only way to return values from a CMake function/macro is to set the value in
+the parent scope (for functions; for macros all values are already accessible
+from outside the macro). Historically this has been done by standardizing names.
+For example, many of the older <code class="docutils literal notranslate"><span class="pre">FindXXX.cmake</span></code> modules return their values by
+setting variables like <code class="docutils literal notranslate"><span class="pre">XXX_INCLUDE_DIRS</span></code> and the like. This is considered bad
+practice now and should be avoided. The modern way to return values is to ask
+the caller for an identifier and then use that identifier to return the result.
+For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">say_hello</span><span class="w"> </span><span class="s">identifier_to_use</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;${identifier_to_use}&quot;</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="nb">end_function</span><span class="p">()</span>
+
+<span class="nb">say_hello</span><span class="p">(</span><span class="s">result</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Value returned : ${result}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># Will be &quot;Hello World&quot;</span>
+</pre></div>
+</div>
+<p>This pattern allows the caller to specify the variable to use and avoids the
+callee accidentally overwriting state in the caller’s scope (a somewhat common
+problem of older, poorly written <code class="docutils literal notranslate"><span class="pre">FindXXX.cmake</span></code> modules which have a tendency
+to clobber variables like <code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_FLAGS</span></code>).</p>
+<p>For functions with multiple return points the above pattern becomes:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">say_hello</span><span class="w"> </span><span class="s">result</span><span class="w"> </span><span class="s">who_to_say_hi_to</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">if</span><span class="p">(</span><span class="s2">&quot;${who_to_say_hi_to}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;Bill&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;${result}&quot;</span><span class="w"> </span><span class="s2">&quot;I guess I will say hello to Bill&quot;</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">return</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">endif</span><span class="p">()</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;${result}&quot;</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Of note you need to include the <code class="docutils literal notranslate"><span class="pre">return()</span></code> command which returns control to
+the caller (otherwise control will continue after the “if”-statement). These
+scenarios occur often enough that CMakePP includes the <code class="docutils literal notranslate"><span class="pre">cpp_return</span></code> function
+which if called like: <code class="docutils literal notranslate"><span class="pre">cpp_return(identifier)</span></code> will set <code class="docutils literal notranslate"><span class="pre">identifier</span></code> in the
+parent scope to the value <code class="docutils literal notranslate"><span class="pre">${identifier}</span></code> and return control to the caller.</p>
+</section>
+<section id="namespace-collisions">
+<h2>Namespace Collisions<a class="headerlink" href="#namespace-collisions" title="Permalink to this heading"></a></h2>
+<p>CMake does not have the equivalent of C/C++’s one-definition rule, <em>e.g.</em>, the
+following is perfectly valid CMake:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">function</span><span class="p">(</span><span class="s">add_library</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Look I overrode a native CMake command!!!&quot;</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+
+<span class="nb">add_library</span><span class="p">()</span><span class="w">                                 </span><span class="c"># Calls our add_library</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">my_lib</span><span class="w"> </span><span class="s">STATIC</span><span class="w"> </span><span class="s">a_source_file.cpp</span><span class="p">)</span><span class="w">  </span><span class="c"># Still our add_library call</span>
+</pre></div>
+</div>
+<p>Note in particular that the last line will run just fine because CMake allows
+you to pass in more arguments than just the positional ones (the extra arguments
+get passed as <code class="docutils literal notranslate"><span class="pre">${ARGN}</span></code>). It is thus essential that we avoid such collisions,
+not just with CMake’s native commands, but also with commands from third party
+modules. The latter in particular is a tall order. The CMakePP solution is to
+use a per module prefix. For example, in the CMakeTest repository we use the
+prefix <code class="docutils literal notranslate"><span class="pre">ct_</span></code>. While not foolproof, when combined with type checking, this
+strategy should avoid many collisions, and raise errors for most of the
+remaining such collisions.</p>
+</section>
+<section id="variable-collisions">
+<h2>Variable Collisions<a class="headerlink" href="#variable-collisions" title="Permalink to this heading"></a></h2>
+<p>Even though functions create scope you have to be careful when your functions
+take identifiers. Consider this somewhat contrived example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Sets the identifier to 3</span>
+<span class="nb">function</span><span class="p">(</span><span class="s">return_3</span><span class="w"> </span><span class="s">result</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="o">${</span><span class="nv">result</span><span class="o">}</span><span class="w"> </span><span class="s">3</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+
+<span class="c"># Sets the identifier to 32</span>
+<span class="nb">function</span><span class="p">(</span><span class="s">return_32</span><span class="w"> </span><span class="s">input</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="s">result</span><span class="w"> </span><span class="s">2</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">return_3</span><span class="p">(</span><span class="o">${</span><span class="nv">input</span><span class="o">}</span><span class="p">)</span>
+<span class="w">    </span><span class="nb">set</span><span class="p">(</span><span class="o">${</span><span class="nv">input</span><span class="o">}</span><span class="w"> </span><span class="s2">&quot;${${input}}${result}&quot;</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="nb">endfunction</span><span class="p">()</span>
+
+<span class="nb">return_32</span><span class="p">(</span><span class="s">var</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Contents: ${var}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># prints &quot;32&quot;</span>
+<span class="nb">return_32</span><span class="p">(</span><span class="s">result</span><span class="p">)</span>
+<span class="nb">message</span><span class="p">(</span><span class="s2">&quot;Contents: ${result}&quot;</span><span class="p">)</span><span class="w">  </span><span class="c"># prints &quot;33&quot;</span>
+</pre></div>
+</div>
+<p>We define two functions. The first one takes an identifier and sets its value to
+3. The second one’s intent is to set an identifier to the value 324 in a
+somewhat convoluted manner by:</p>
+<ol class="arabic simple">
+<li><p>Setting a temporary variable <code class="docutils literal notranslate"><span class="pre">result</span></code> to 2,</p></li>
+<li><p>having the <code class="docutils literal notranslate"><span class="pre">return_3</span></code> set the provided identifier to 3, and</p></li>
+<li><p>finally concatenates the identifier’s value with the temporary’s value.</p></li>
+</ol>
+<p>As long as the caller of <code class="docutils literal notranslate"><span class="pre">return_32</span></code> doesn’t pass in an identifier named
+<code class="docutils literal notranslate"><span class="pre">result</span></code>, <code class="docutils literal notranslate"><span class="pre">return_32</span></code> works correctly. If the caller does decide to call
+their identifier <code class="docutils literal notranslate"><span class="pre">result</span></code>, then the call to <code class="docutils literal notranslate"><span class="pre">return_3</span></code> in <code class="docutils literal notranslate"><span class="pre">return_32</span></code>
+overwrites the temporary of the same name so that the result of <code class="docutils literal notranslate"><span class="pre">return_32</span></code> is
+actually <code class="docutils literal notranslate"><span class="pre">33</span></code>.</p>
+<p>While this example may seem contrived, one of the dangers of having to pass an
+identifier in to a function in order to get a return is that if that identifier
+clashes with any temporaries they get overridden. Particularly for common,
+simple variable names (like <code class="docutils literal notranslate"><span class="pre">result</span></code>) the caller picking an identifier
+identical to your temporary happens more often than you might think (especially
+when the same programmer wrote all the functions on the stack). To mitigate
+this, it’s common to prefix function variable names with <code class="docutils literal notranslate"><span class="pre">_</span></code> characters, the
+idea being that users writing CMake are unlikely to declare variable names that
+start with such characters. The problem is that in a framework like CMakePP we
+end up nesting so many developer functions it’s actually quite likely for the
+underscore prefixed names to clash too. Our solution is to mangle the name of
+the function into the variable as well. While not foolproof it does help.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="control_flow.html" class="btn btn-neutral float-left" title="Control Flow Statements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="callbacks.html" class="btn btn-neutral float-right" title="Callbacks and Lambdas in CMake" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2020, 2022-2023, Authors of CMakePP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
