@@ -24,7 +24,7 @@ on:
 
 jobs:
   Build-Documentation:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     uses: CMakePP/.github/.github/workflows/deploy_docs_master.yaml@main
     with:
       docs_dir: 'docs'
