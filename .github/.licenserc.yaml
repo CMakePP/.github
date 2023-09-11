@@ -27,5 +27,6 @@ header:
     - profile/
     - tests/
     - LICENSE
+    - *.bib
 
   comment: never
